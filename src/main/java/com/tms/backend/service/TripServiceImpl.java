@@ -73,6 +73,12 @@ public class TripServiceImpl implements TripService {
         trip.setEstimatedArrivalTime(request.getEstimatedArrivalTime());
         trip = tripRepository.save(trip);
 
+        vehicle.setStatus(VehicleStatus.IN_USE);
+        vehicleRepository.save(vehicle);
+
+        driver.setStatus(DriverStatus.ON_TRIP);
+        driverRepository.save(driver);
+
         int seq = 1;
         for (Order order : orders) {
             TripOrder to = new TripOrder();
@@ -245,7 +251,7 @@ public class TripServiceImpl implements TripService {
                     oldVehicle.setStatus(VehicleStatus.AVAILABLE);
                     vehicleRepository.save(oldVehicle);
                 }
-                newVehicle.setStatus(trip.getStatus() == TripStatus.RUNNING ? VehicleStatus.IN_USE : VehicleStatus.AVAILABLE);
+                newVehicle.setStatus(VehicleStatus.IN_USE);
                 vehicleRepository.save(newVehicle);
             }
             
@@ -274,7 +280,7 @@ public class TripServiceImpl implements TripService {
                     oldDriver.setStatus(DriverStatus.AVAILABLE);
                     driverRepository.save(oldDriver);
                 }
-                newDriver.setStatus(trip.getStatus() == TripStatus.RUNNING ? DriverStatus.ON_TRIP : DriverStatus.AVAILABLE);
+                newDriver.setStatus(DriverStatus.ON_TRIP);
                 driverRepository.save(newDriver);
             }
             
