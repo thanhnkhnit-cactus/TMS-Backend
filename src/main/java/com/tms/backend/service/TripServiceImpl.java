@@ -319,6 +319,7 @@ public class TripServiceImpl implements TripService {
         }
 
         if (request.getStatus() != null && request.getStatus() != trip.getStatus()) {
+            tripRepository.save(trip); // Save any vehicle/driver updates first
             if (request.getStatus() == TripStatus.COMPLETED) {
                 completeTrip(id, request.getGenerateInvoice(), request.getEndTime(), request.getFuelExpense(), request.getTollExpense());
                 return;
